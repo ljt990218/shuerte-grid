@@ -10,7 +10,7 @@ interface GridItem {
 const totalTime = ref(0)
 const startTime = ref(0)
 const endTime = ref(0)
-const isGameOver = ref(true)
+const isGameOver = ref(false)
 const currentItemID = ref(0)
 
 function shuffleArray<T>(array: T[]): T[] {
