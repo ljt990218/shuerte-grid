@@ -10,7 +10,7 @@ interface GridItem {
 const totalTime = ref(0)
 const startTime = ref(0)
 const endTime = ref(0)
-const isGameOver = ref(false)
+const isGameOver = ref(true)
 const currentItemID = ref(0)
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -102,7 +102,7 @@ function getTimeLevel(time: number, group: string) {
 </script>
 
 <template>
-  <h1 class="text-3xl my-4 text-center font-bold">Shuerte Grid</h1>
+  <h1 class="text-3xl pt-4 mb-4 text-center font-bold">Shuerte Grid</h1>
   <div class="flex justify-center items-center p-2 touch-manipulation">
     <div v-if="!isGameOver" class="grid grid-cols-5 gap-2 p-4 bg-gray-100 rounded-lg">
       <div
@@ -118,17 +118,31 @@ function getTimeLevel(time: number, group: string) {
       </div>
     </div>
 
-    <div v-if="isGameOver" class="text-center bg-white p-16 rounded-lg shadow-lg">
+    <div v-if="isGameOver" class="text-center bg-white px-8 py-8 rounded-lg shadow-lg">
       <h1 class="text-4xl font-bold mb-6 text-blue-600">恭喜完成!</h1>
       <p class="text-2xl mb-4 text-gray-700">
         用时: <span class="font-bold text-blue-500">{{ totalTime }}</span> 秒
       </p>
       <div class="mb-4">
-        <select v-model="ageGroup" class="px-4 py-2 rounded border border-gray-300">
-          <option value="child">7-12岁</option>
-          <option value="teen">13-17岁</option>
-          <option value="adult">18岁及以上</option>
-        </select>
+        <div class="flex gap-2 justify-center">
+          <button
+            v-for="(option, value) in [
+              { value: 'child', label: '7-12岁' },
+              { value: 'teen', label: '13-17岁' },
+              { value: 'adult', label: '18岁及以上' }
+            ]"
+            :key="value"
+            @click="ageGroup = option.value"
+            :class="[
+              'px-4 py-2 rounded-full transition-all duration-200',
+              ageGroup === option.value
+                ? 'bg-blue-400 text-white shadow-md transform scale-105'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            ]"
+          >
+            {{ option.label }}
+          </button>
+        </div>
       </div>
       <div class="text-sm text-gray-500 mb-6">
         <p class="mb-1">参考成绩：</p>
@@ -143,7 +157,7 @@ function getTimeLevel(time: number, group: string) {
       </div>
       <button
         @click="resetGame"
-        class="bg-blue-500 text-white px-8 py-3 rounded-lg text-xl font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
+        class="bg-blue-500 text-white px-8 py-2 rounded-lg text-xl font-semibold hover:bg-blue-600 transition-colors duration-200 shadow-md"
       >
         再来一次
       </button>
